@@ -1,31 +1,54 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqfinui622n23"]
+[gd_scene load_steps=4 format=3 uid="uid://cqfinui622n23"]
 
 [ext_resource type="Script" uid="uid://c25siwmkv5x4f" path="res://sketch/sketch.gd" id="1_rnlyb"]
+[ext_resource type="AudioStream" uid="uid://dj8xlg58yhvuf" path="res://assets/warning_tone.mp3" id="3_75bl7"]
+[ext_resource type="FontFile" uid="uid://bqfjmxxrqshqp" path="res://Ubuntu-M.ttf" id="3_qrb0m"]
 
-[node name="Sketch" type="Control"]
-layout_mode = 3
+[node name="Panel" type="Panel"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="DisplaySprite" type="Sprite2D" parent="."]
-offset = Vector2(576, 324)
-script = ExtResource("1_rnlyb")
-
-[node name="Button" type="Button" parent="."]
+[node name="ImageTextureRect" type="TextureRect" parent="." node_paths=PackedStringArray("timer")]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -43.0
-offset_top = -31.0
-offset_right = 43.0
 grow_horizontal = 2
-grow_vertical = 0
-text = "change-o?"
+grow_vertical = 2
+expand_mode = 5
+stretch_mode = 3
+script = ExtResource("1_rnlyb")
+timer = NodePath("../Timer")
 
-[connection signal="pressed" from="Button" to="DisplaySprite" method="_on_button_pressed"]
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="TimerText" type="RichTextLabel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 1163.0
+offset_top = 944.0
+offset_right = 1253.0
+offset_bottom = 969.0
+theme_override_fonts/normal_font = ExtResource("3_qrb0m")
+theme_override_fonts/mono_font = ExtResource("3_qrb0m")
+theme_override_fonts/italics_font = ExtResource("3_qrb0m")
+theme_override_fonts/bold_italics_font = ExtResource("3_qrb0m")
+theme_override_fonts/bold_font = ExtResource("3_qrb0m")
+theme_override_font_sizes/bold_italics_font_size = 15
+theme_override_font_sizes/normal_font_size = 22
+text = "00:50:34"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="WarningTone" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(881, 476)
+stream = ExtResource("3_75bl7")
+volume_db = 24.0
+
+[connection signal="timeout" from="Timer" to="ImageTextureRect" method="_on_timer_timeout"]

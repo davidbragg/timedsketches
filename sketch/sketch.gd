@@ -1,38 +1,76 @@
-extends Sprite2D
+extends TextureRect
 
-# TODO: Clean up hardcoded values
-# TODO: All the file madness can move out of the script elsewhere
+var image: Image = Image.new()
+var index: int = 0
+var session: PackedScene = load("res://session/session.tscn")
+var warning_triggered: bool = false
 
-#var source_directory : String = "/home/dave/Pictures/Avatars/"
-var source_directory : String = "/home/dave/Pictures/Desktops/"
-var files = []
-var valid_extensions = ["jpg", "png"]
-var index : int = 0
+@export var timer:Timer
 
 func _ready():
-	var dir = DirAccess.open(source_directory)
-	if dir == null:
-		printerr("Could not open folder.")
-		return
-	for file : String in dir.get_files():
-		if valid_extensions.any(func(ext): return ext == file.get_extension()):
-			print("match " + file.get_extension())
-			files.append(file)
-		else:
-			print("fail  " + file.get_extension())
-	files.shuffle()
-
-# this is effectively my process forward function
-# TODO: add a backward function
-func _on_button_pressed() -> void:
-	print(files.size(), " ", index)
-	if files.size() > 0 && index < files.size():
-		var image = Image.new()
-		image.load(source_directory + files[index])
-		var t = ImageTexture.create_from_image(image)
-		texture = t
-		if index < files.size() - 1:
-			index += 1
+	load_image()
+	if DataManager.run_timer:
+		timer.wait_time = DataManager.timer_length
+		timer.start()
+		$"../TimerText".visible = true
 	else:
-		# TODO disable button on index == files.size() - 1
-		print("no images or at image array end")		
+		$"../TimerText".visible = false
+
+func _process(_delta: float) -> void:
+	if DataManager.run_timer and timer.is_stopped() == false:
+		var r_time = int(ceil(timer.time_left))
+		@warning_ignore("integer_division")
+		var hours = r_time / 3600
+		r_time -= hours * 3600
+		@warning_ignore("integer_division")
+		var minutes = r_time / 60
+		r_time -= minutes * 60
+		var seconds = r_time
+		var formatted_time = "%02d" % [hours] + ":" + "%02d" % [minutes] + ":" + "%02d" % [seconds]
+		$"../TimerText".text = formatted_time
+		if !warning_triggered && seconds == 10:
+			print("10 second warning")
+			$'../WarningTone'.play()
+			warning_triggered = true
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.is_released():
+		match event.get_keycode():
+			32: #space
+				if DataManager.run_timer:
+					timer.paused = !timer.paused
+			81: # Q
+				get_tree().change_scene_to_packed(session)
+			4194319: # left arrow
+				prev_image()
+			4194321: # right arrow
+				next_image()
+
+func load_image() -> void:
+	image.load(DataManager.files[index])
+	var window_size:Vector2 = get_viewport().size
+	var image_size:Vector2 = image.get_size()
+	var image_transform:Vector2 = window_size / image_size
+	var scale_value = min(image_transform.x, image_transform.y)
+	image.resize(image_size.x * scale_value, image_size.y * scale_value)
+	texture = ImageTexture.create_from_image(image)
+	if DataManager.run_timer:
+		timer.start()
+		warning_triggered = false
+
+func next_image() -> void:
+	if DataManager.files.size() > 0 && index < DataManager.files.size() - 1:
+		index += 1
+		load_image()
+
+func prev_image() -> void:
+	if index > 0:
+		index -= 1
+		load_image()
+
+func _on_timer_timeout() -> void:
+	if index == DataManager.files.size() - 1:
+		timer.stop()
+		$"../TimerText".text = "END"
+	else:
+		next_image()

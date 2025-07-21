@@ -11,9 +11,20 @@ config_version=5
 [application]
 
 config/name="Timed Sketches"
-run/main_scene="uid://cqfinui622n23"
+run/main_scene="uid://bvbeg7eysjkr0"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+DataManager="*res://data_manager.gd"
+
+[display]
+
+window/size/viewport_width=1268
+window/size/viewport_height=972
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 
 [dotnet]
 

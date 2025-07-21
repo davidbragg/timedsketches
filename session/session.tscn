@@ -1,0 +1,149 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvbeg7eysjkr0"]
+
+[ext_resource type="Script" uid="uid://dk1opl6sqrnmv" path="res://session/session.gd" id="1_e0uub"]
+[ext_resource type="PackedScene" uid="uid://cuyqv80tsuncp" path="res://preset_popup/preset_popup.tscn" id="2_nf2ru"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.996493, 0.995136)
+script = ExtResource("1_e0uub")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a Directory"
+initial_position = 1
+size = Vector2i(810, 360)
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -47.5
+offset_right = 250.0
+offset_bottom = 47.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PresetLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Load Preset"
+
+[node name="PresetList" type="OptionButton" parent="VBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="DirLabel" type="RichTextLabel" parent="VBoxContainer"]
+clip_contents = false
+custom_minimum_size = Vector2(500, 25)
+layout_mode = 2
+size_flags_vertical = 6
+text = "no directory selected
+"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="DirButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Choose Directory
+"
+
+[node name="RecursiveCheck" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "recursive"
+
+[node name="LoadedImagesLabel" type="RichTextLabel" parent="VBoxContainer"]
+clip_contents = false
+custom_minimum_size = Vector2(500, 25)
+layout_mode = 2
+size_flags_vertical = 6
+text = "0 images loaded"
+
+[node name="TimerCheckContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TimerCheck" type="CheckBox" parent="VBoxContainer/TimerCheckContainer"]
+layout_mode = 2
+text = "enable timer"
+
+[node name="TimerWarningCheck" type="CheckBox" parent="VBoxContainer/TimerCheckContainer"]
+layout_mode = 2
+text = "10 second warning"
+
+[node name="TimerSetContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TimerSecondsEdit" type="LineEdit" parent="VBoxContainer/TimerSetContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="TimerLabel" type="RichTextLabel" parent="VBoxContainer/TimerSetContainer"]
+custom_minimum_size = Vector2(150, 25)
+layout_mode = 2
+text = "timer in seconds	"
+
+[node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="PresetManagerBox" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="SavePresetButton" type="Button" parent="VBoxContainer/PresetManagerBox"]
+layout_mode = 2
+text = "Save as Preset
+"
+
+[node name="DeletePresetButton" type="Button" parent="VBoxContainer/PresetManagerBox"]
+layout_mode = 2
+disabled = true
+text = "Delete Preset"
+
+[node name="UpdatePresetButton" type="Button" parent="VBoxContainer/PresetManagerBox"]
+layout_mode = 2
+disabled = true
+text = "Update Preset"
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "START"
+
+[node name="PresetPopup" parent="." instance=ExtResource("2_nf2ru")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="dir_selected" from="FileDialog" to="." method="_on_file_dialog_dir_selected"]
+[connection signal="item_selected" from="VBoxContainer/PresetList" to="." method="_on_preset_list_item_selected"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/DirButton" to="." method="_on_dir_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/RecursiveCheck" to="." method="_on_recursive_check_pressed"]
+[connection signal="pressed" from="VBoxContainer/PresetManagerBox/SavePresetButton" to="." method="_on_save_preset_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/PresetManagerBox/DeletePresetButton" to="." method="_on_delete_preset_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/PresetManagerBox/UpdatePresetButton" to="." method="_on_update_preset_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
