@@ -1,8 +1,9 @@
 extends Node
 
 var valid_extensions: Array[String] = ["jpg", "png"]
-var files: Array[String] = []
 var preset_file: String = "user://presets.json"
+
+var files: Array[String] = []
 var source_directory: String = "no directory selected"
 var presets: Array
 
@@ -12,6 +13,21 @@ var recursive_check: bool = false
 
 var timer_length: int = 300
 var preset_index: int = -1
+
+func delete_preset() -> void:
+	presets.remove_at(preset_index)
+	save_presets()
+	reset_values()
+
+func reset_values() -> void:
+	files = []
+	run_timer = true
+	timer_warning = true
+	recursive_check = false
+	source_directory = "no directory selected"
+	timer_length = 300
+	preset_index = -1
+
 
 func load_file_paths() -> void:
 	DataManager.files = []
@@ -66,11 +82,13 @@ func save_preset(title: String) -> void:
 		"timer_length": timer_length
 	}
 	presets.append(preset_dict)
+	preset_index = presets.size() - 1
+
+func save_presets() -> void:
 	var file = FileAccess.open(preset_file, FileAccess.WRITE)
 	var json_string = JSON.stringify(presets)
 	file.store_string(json_string)
 	file.close()
-	preset_index = presets.size() - 1
 
 func set_values_by_preset() -> void:
 	var selected_preset = presets[preset_index]
@@ -85,3 +103,15 @@ func set_values(recursive_bool: bool, timer_bool: bool, warning_bool: bool, time
 	run_timer = timer_bool
 	timer_warning = warning_bool
 	timer_length = timer_int
+
+func update_preset(title: String) -> void:
+	var preset_dict: Dictionary = {
+		"title": title,
+		"source_directory": source_directory,
+		"load_recursive": recursive_check,
+		"enable_timer": run_timer,
+		"timer_warning": timer_warning,
+		"timer_length": timer_length
+	}
+	presets[preset_index] = preset_dict
+	save_presets()

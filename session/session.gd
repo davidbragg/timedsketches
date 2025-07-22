@@ -62,7 +62,11 @@ func populate_presets() -> void:
 		for i in range(DataManager.presets.size()):
 			$VBoxContainer/PresetList.add_item(DataManager.presets[i]["title"])
 		$VBoxContainer/PresetList.select(DataManager.preset_index)
-	if $VBoxContainer/PresetList.selected != -1:
+
+	if $VBoxContainer/PresetList.selected == -1:
+		$VBoxContainer/PresetManagerBox/DeletePresetButton.disabled = true
+		$VBoxContainer/PresetManagerBox/UpdatePresetButton.disabled = true
+	else:
 		$VBoxContainer/PresetManagerBox/DeletePresetButton.disabled = false
 		$VBoxContainer/PresetManagerBox/UpdatePresetButton.disabled = false
 
@@ -100,8 +104,6 @@ func _on_popup_submit(title: String, mode: int, submit: bool) -> void:
 		0: # save logic
 			if title == "" ||  DataManager.files == [] || timer_length < 1 || timer_length > 35999:
 				return
-
-			print("In Save Preset")
 			DataManager.set_values(
 				$VBoxContainer/HBoxContainer/RecursiveCheck.button_pressed,
 				$VBoxContainer/TimerCheckContainer/TimerCheck.button_pressed,
@@ -110,22 +112,18 @@ func _on_popup_submit(title: String, mode: int, submit: bool) -> void:
 			)
 			DataManager.save_preset(title)
 			populate_presets()
-
-			# update the option list and set to current index
-		1: # update logic
+		1: # delete logic
+			DataManager.delete_preset()
+			populate_presets()
+			populate_nodes()
+		2: # update logic
 			if title == "" ||  DataManager.files == [] || timer_length < 1 || timer_length > 35999:
 				return
-			print("In Update Preset")
 			DataManager.set_values(
 				$VBoxContainer/HBoxContainer/RecursiveCheck.button_pressed,
 				$VBoxContainer/TimerCheckContainer/TimerCheck.button_pressed,
 				$VBoxContainer/TimerCheckContainer/TimerWarningCheck.button_pressed,
 				timer_length
 			)
-			# Datamanager.update_preset(title) -> should have index saved in DataManager
-			# update the option list and set to current index
-		2: # delete logic
-			print("In Delete Preset")
-			# DataManager.delete_preset() -> should ahve index saved in DataManager
-			# update the option list
-			# clear option list setting
+			DataManager.update_preset(title);
+			populate_presets()

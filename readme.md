@@ -12,7 +12,7 @@ Set the timer length for how long an image should be displayed. This can be set 
 
 The timer can be disabled. This will prevent images from auto advancing in the timed sketch view. Images can be changes by using the keyboard inputs listed below.
 
-Sessions can be saved and loaded again in the future.
+Sessions can be saved and loaded again in the future. Session preset management allows saving, editing, and deleting presets.
 
 Once a valid source folder has been selected the start button will launch the timed sketch session.
 
@@ -30,3 +30,11 @@ Keyboard Inputs:
 - move back an image - left arrow
 - pause/resume timer - space bar
 - return to config screen - q
+
+### Future Feature Considerations
+
+- add vs code debug profile (for my own convenience)
+- Session Setup
+	- number of images to study -> to limit study session
+- Timed Sketch View
+	- show the number of files/current file
