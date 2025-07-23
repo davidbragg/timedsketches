@@ -12,9 +12,9 @@ func _ready():
 	if DataManager.run_timer:
 		timer.wait_time = DataManager.timer_length
 		timer.start()
-		$"../TimerText".visible = true
+		%TimerText.visible = true
 	else:
-		$"../TimerText".visible = false
+		%TimerText.visible = false
 
 func _process(_delta: float) -> void:
 	if DataManager.run_timer and timer.is_stopped() == false:
@@ -27,7 +27,7 @@ func _process(_delta: float) -> void:
 		r_time -= minutes * 60
 		var seconds = r_time
 		var formatted_time = "%02d" % [hours] + ":" + "%02d" % [minutes] + ":" + "%02d" % [seconds]
-		$"../TimerText".text = formatted_time
+		%TimerText.text = formatted_time
 		# play 10 second warning sound
 		if !warning_triggered && seconds == 10:
 			$'../WarningTone'.play()
@@ -71,6 +71,6 @@ func prev_image() -> void:
 func _on_timer_timeout() -> void:
 	if index == DataManager.files.size() - 1:
 		timer.stop()
-		$"../TimerText".text = "END"
+		%TimerText.text = "END"
 	else:
 		next_image()

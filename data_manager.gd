@@ -28,7 +28,6 @@ func reset_values() -> void:
 	timer_length = 300
 	preset_index = -1
 
-
 func load_file_paths() -> void:
 	DataManager.files = []
 	var dir = DirAccess.open(DataManager.source_directory)
@@ -83,6 +82,7 @@ func save_preset(title: String) -> void:
 	}
 	presets.append(preset_dict)
 	preset_index = presets.size() - 1
+	save_presets()
 
 func save_presets() -> void:
 	var file = FileAccess.open(preset_file, FileAccess.WRITE)

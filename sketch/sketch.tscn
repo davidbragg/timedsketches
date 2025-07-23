@@ -28,13 +28,26 @@ timer = NodePath("../Timer")
 [node name="Timer" type="Timer" parent="."]
 wait_time = 2.0
 
-[node name="TimerText" type="RichTextLabel" parent="."]
-visible = false
+[node name="WarningTone" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(881, 476)
+stream = ExtResource("3_75bl7")
+volume_db = 24.0
+
+[node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 0
-offset_left = 1163.0
-offset_top = 944.0
-offset_right = 1253.0
-offset_bottom = 969.0
+offset_left = 1166.0
+offset_top = 934.0
+offset_right = 1256.0
+offset_bottom = 962.0
+color = Color(0, 0, 0, 0.313726)
+
+[node name="TimerText" type="RichTextLabel" parent="ColorRect"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 92.0
+offset_bottom = 26.0
 theme_override_fonts/normal_font = ExtResource("3_qrb0m")
 theme_override_fonts/mono_font = ExtResource("3_qrb0m")
 theme_override_fonts/italics_font = ExtResource("3_qrb0m")
@@ -45,10 +58,5 @@ theme_override_font_sizes/normal_font_size = 22
 text = "00:50:34"
 scroll_active = false
 autowrap_mode = 0
-
-[node name="WarningTone" type="AudioStreamPlayer2D" parent="."]
-position = Vector2(881, 476)
-stream = ExtResource("3_75bl7")
-volume_db = 24.0
 
 [connection signal="timeout" from="Timer" to="ImageTextureRect" method="_on_timer_timeout"]
