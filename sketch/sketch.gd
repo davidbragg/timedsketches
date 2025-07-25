@@ -29,7 +29,7 @@ func _process(_delta: float) -> void:
 		var formatted_time = "%02d" % [hours] + ":" + "%02d" % [minutes] + ":" + "%02d" % [seconds]
 		%TimerText.text = formatted_time
 		# play 10 second warning sound
-		if !warning_triggered && seconds == 10:
+		if !warning_triggered && hours == 0 && minutes == 0 && seconds == 10:
 			$'../WarningTone'.play()
 			warning_triggered = true
 

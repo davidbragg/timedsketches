@@ -48,7 +48,7 @@ layout_mode = 2
 
 [node name="DirLabel" type="RichTextLabel" parent="VBoxContainer"]
 clip_contents = false
-custom_minimum_size = Vector2(500, 25)
+custom_minimum_size = Vector2(650, 25)
 layout_mode = 2
 size_flags_vertical = 6
 text = "no directory selected
