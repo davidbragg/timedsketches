@@ -73,28 +73,37 @@ layout_mode = 2
 size_flags_vertical = 6
 text = "0 images loaded"
 
-[node name="TimerCheckContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="TimerContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="TimerCheck" type="CheckBox" parent="VBoxContainer/TimerCheckContainer"]
+[node name="TimerCheck" type="CheckBox" parent="VBoxContainer/TimerContainer"]
 layout_mode = 2
 text = "enable timer"
 
-[node name="TimerWarningCheck" type="CheckBox" parent="VBoxContainer/TimerCheckContainer"]
-layout_mode = 2
-text = "10 second warning"
-
-[node name="TimerSetContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="TimerSecondsEdit" type="LineEdit" parent="VBoxContainer/TimerSetContainer"]
+[node name="TimerSecondsEdit" type="LineEdit" parent="VBoxContainer/TimerContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="TimerLabel" type="RichTextLabel" parent="VBoxContainer/TimerSetContainer"]
+[node name="TimerLabel" type="RichTextLabel" parent="VBoxContainer/TimerContainer"]
 custom_minimum_size = Vector2(150, 25)
 layout_mode = 2
 text = "timer in seconds	"
+
+[node name="WarningContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TimerWarningCheck" type="CheckBox" parent="VBoxContainer/WarningContainer"]
+layout_mode = 2
+text = "enable warning"
+
+[node name="WarningTimeLine" type="LineEdit" parent="VBoxContainer/WarningContainer"]
+layout_mode = 2
+text = "10"
+editable = false
+
+[node name="WarningLabel" type="Label" parent="VBoxContainer/WarningContainer"]
+layout_mode = 2
+text = "seconds before warning"
 
 [node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
@@ -124,6 +133,11 @@ layout_mode = 2
 layout_mode = 2
 text = "START"
 
+[node name="VersionLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+horizontal_alignment = 2
+
 [node name="PresetPopup" parent="." instance=ExtResource("2_nf2ru")]
 visible = false
 layout_mode = 1
@@ -143,6 +157,8 @@ grow_vertical = 2
 [connection signal="item_selected" from="VBoxContainer/PresetList" to="." method="_on_preset_list_item_selected"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DirButton" to="." method="_on_dir_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/RecursiveCheck" to="." method="_on_recursive_check_pressed"]
+[connection signal="toggled" from="VBoxContainer/TimerContainer/TimerCheck" to="." method="_on_timer_check_toggled"]
+[connection signal="toggled" from="VBoxContainer/WarningContainer/TimerWarningCheck" to="." method="_on_timer_warning_check_toggled"]
 [connection signal="pressed" from="VBoxContainer/PresetManagerBox/SavePresetButton" to="." method="_on_save_preset_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/PresetManagerBox/DeletePresetButton" to="." method="_on_delete_preset_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/PresetManagerBox/UpdatePresetButton" to="." method="_on_update_preset_button_pressed"]

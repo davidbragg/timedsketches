@@ -1,5 +1,8 @@
 extends Node
 
+const VERSION: String = "0.1.1"
+const WARNING_LENGTH: int = 10
+
 var valid_extensions: Array[String] = ["jpg", "png"]
 var preset_file: String = "user://presets.json"
 
@@ -12,22 +15,10 @@ var timer_warning: bool = true
 var recursive_check: bool = false
 
 var timer_length: int = 300
+var warning_length: int = WARNING_LENGTH
 var preset_index: int = -1
 
-func delete_preset() -> void:
-	presets.remove_at(preset_index)
-	save_presets()
-	reset_values()
-
-func reset_values() -> void:
-	files = []
-	run_timer = true
-	timer_warning = true
-	recursive_check = false
-	source_directory = "no directory selected"
-	timer_length = 300
-	preset_index = -1
-
+# File Management
 func load_file_paths() -> void:
 	DataManager.files = []
 	var dir = DirAccess.open(DataManager.source_directory)
@@ -66,22 +57,55 @@ func load_file_paths_recursive(dir_path: String) -> Array[String]:
 
 	return dir_files
 
+# Manage Values
+func set_values_by_preset() -> void:
+	var selected_preset = presets[preset_index]
+	source_directory = selected_preset["source_directory"]
+	recursive_check = selected_preset["load_recursive"]
+	run_timer = selected_preset["enable_timer"]
+	timer_warning = selected_preset["timer_warning"]
+	timer_length = selected_preset["timer_length"]
+	# support presets created in previous versions
+	if selected_preset.has("warning_length"):
+		warning_length = selected_preset["warning_length"]
+	else:
+		warning_length = WARNING_LENGTH
+
+func set_values(recursive_bool: bool, timer_bool: bool, warning_bool: bool, timer_int: int, warning_int: int):
+	recursive_check = recursive_bool
+	run_timer = timer_bool
+	timer_warning = warning_bool
+	timer_length = timer_int
+	warning_length = warning_int
+
+func reset_values() -> void:
+	files = []
+	run_timer = true
+	timer_warning = true
+	recursive_check = false
+	source_directory = "no directory selected"
+	timer_length = 300
+	warning_length = WARNING_LENGTH
+	preset_index = -1
+
+# Manage Presets
 func load_presets() -> void:
 	if FileAccess.file_exists(preset_file):
 		var json_as_text = FileAccess.get_file_as_string(preset_file)
 		presets = JSON.parse_string(json_as_text)
 
+func delete_preset() -> void:
+	presets.remove_at(preset_index)
+	save_presets()
+	reset_values()
+
 func save_preset(title: String) -> void:
-	var preset_dict: Dictionary = {
-		"title": title,
-		"source_directory": source_directory,
-		"load_recursive": recursive_check,
-		"enable_timer": run_timer,
-		"timer_warning": timer_warning,
-		"timer_length": timer_length
-	}
-	presets.append(preset_dict)
+	presets.append(make_preset(title))
 	preset_index = presets.size() - 1
+	save_presets()
+
+func update_preset(title: String) -> void:
+	presets[preset_index] = make_preset(title)
 	save_presets()
 
 func save_presets() -> void:
@@ -90,28 +114,14 @@ func save_presets() -> void:
 	file.store_string(json_string)
 	file.close()
 
-func set_values_by_preset() -> void:
-	var selected_preset = presets[preset_index]
-	source_directory = selected_preset["source_directory"]
-	recursive_check = selected_preset["load_recursive"]
-	run_timer = selected_preset["enable_timer"]
-	timer_warning = selected_preset["timer_warning"]
-	timer_length = selected_preset["timer_length"]
-
-func set_values(recursive_bool: bool, timer_bool: bool, warning_bool: bool, timer_int: int):
-	recursive_check = recursive_bool
-	run_timer = timer_bool
-	timer_warning = warning_bool
-	timer_length = timer_int
-
-func update_preset(title: String) -> void:
+func make_preset(title: String) -> Dictionary:
 	var preset_dict: Dictionary = {
 		"title": title,
 		"source_directory": source_directory,
 		"load_recursive": recursive_check,
 		"enable_timer": run_timer,
 		"timer_warning": timer_warning,
-		"timer_length": timer_length
+		"timer_length": timer_length,
+		"warning_length": warning_length
 	}
-	presets[preset_index] = preset_dict
-	save_presets()
+	return preset_dict

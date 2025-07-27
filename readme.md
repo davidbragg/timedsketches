@@ -40,5 +40,6 @@ Keyboard Inputs:
 	- number of images to study -> to limit study session
 	- add some keyboard shortcuts
 	- auto sort presets alphabetically?
+	- temporarily display any validation errors -> no images available, invalid timers, that kind of business
 - Timed Sketch View
 	- show # (index) of current file / total number of files (or study limit number)
