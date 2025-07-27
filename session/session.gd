@@ -111,7 +111,7 @@ func populate_nodes() -> void:
 	warning_time_line.text = str(DataManager.warning_length)
 	warning_time_line.editable = timer_warning_check.button_pressed
 	set_loaded_images_label()
-	$VBoxContainer/VersionLabel.text = "Timed Skecthes - " + DataManager.VERSION
+	$VBoxContainer/VersionLabel.text = "Timed Sketches >> " + DataManager.VERSION
 func populate_presets() -> void:
 	preset_list.clear()
 	if DataManager.presets:

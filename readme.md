@@ -6,17 +6,23 @@ It is very barebones and written to be a slim application for my personal use. I
 
 ### Session Setup
 
-The application loads into the session setup view. This allows the user to select the source images folder. There is a toggle to get images recursively. This is useful if reference images are sorted into different folders and the study session is more open subject.
+![Session Management Screenshot](screenshots/0.1.1.jpg)
 
-Set the timer length for how long an image should be displayed. This can be set as low as one second or as high as 359999 (99 hours, 59 minutes, and 59 seconds). A reasonable number is probably somewhere between 10 and 3600 seconds (1 hour).
+Preset dropdown should auto populate if any presets have been saved locally.
 
-The timer can be disabled. This will prevent images from auto advancing in the timed sketch view. Images can be changed by using the keyboard inputs listed below.
+Choose a directory, if there are any images in the direction it will show in the `images loaded` label. Checking `recursive` will search all directories within the selected directory.
 
-10 second warning will play a chime when there's 10 seconds left before advancing to the next image.
+`enable timer` to have the application automatically advance images. This can be set as low as one second or as high as 359999 (99 hours, 59 minutes, and 59 seconds). A reasonable number is probably somewhere between 10 and 3600 seconds (1 hour).
+
+`enable warning` will play a chime before auto advancing to the next image. This can be set between 1 and 59 seconds. Requires `enable timer` to function.
 
 Sessions can be saved and loaded again in the future. Session preset management allows saving, editing, and deleting presets.
 
-Once a valid source folder has been selected the start button will launch the timed sketch session.
+`START` will launch in to the image view. It will not move forward if any of the following are true:
+- no directory has been selected
+- the selected directory has no images in it
+- the timer is enabled, but is not a valid number between 1 and 359999
+- the warning is enabled, but is not a valid number between 1 and 59
 
 ### Timed Sketch View
 
@@ -33,7 +39,7 @@ Keyboard Inputs:
 - pause/resume timer - space bar
 - return to config screen - q
 
-### Future Feature Considerations
+### Future Considerations
 
 - add vs code debug profile (for my own convenience)
 - Session Setup
